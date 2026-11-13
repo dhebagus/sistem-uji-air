@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Uji pH & TDS Air - Toko Royalti Multi Cabang</title>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            --sidebar-bg: #ffffff;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            letter-spacing: -0.01em;
+        }
+        /* Navbar */
+        .navbar-custom {
+            background: #ffffff !important;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        /* Sidebar */
+        .sidebar {
+            min-height: calc(100vh - 73px);
+            background: var(--sidebar-bg);
+            border-right: 1px solid #e2e8f0;
+        }
+        .sidebar .nav-link {
+            color: #475569;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 12px 18px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar .nav-link:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+            transform: translateX(4px);
+        }
+        .sidebar .nav-link.active {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+        /* Cards */
+        .card {
+            border: 1px solid #e2e8f0;
+            box-shadow: var(--card-shadow);
+            border-radius: 16px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .card-stat {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background: #ffffff;
+        }
+        .card-stat::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(79,70,229,0.06) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .card-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+        }
+        /* Tables */
+        .table > :not(caption) > * > * {
+            padding: 1.1rem 1rem;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+        .table thead th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        /* Badges */
+        .badge {
+            font-weight: 600;
+            padding: 0.55em 1em;
+            letter-spacing: 0.02em;
+        }
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+        }
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top shadow-sm py-3">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold text-dark d-flex align-items-center" href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="rounded-3 me-2 shadow-sm" style="width: 38px; height: 38px; object-fit: cover;">
+                <span>Royalti<span class="text-primary">Water</span>.sys</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark fw-semibold d-flex align-items-center bg-light border rounded-pill px-3 py-1" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="bg-primary rounded-circle text-white d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; font-size: 13px;">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <span>{{ session.get('nama_lengkap') }}</span>
+                            <span class="badge bg-primary ms-2 text-uppercase" style="font-size: 10px;">{{ session.get('role') }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2">
+                            <li><a class="dropdown-item py-2 text-danger fw-medium" href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse p-3">
+                <div class="position-sticky pt-3">
+                    <div class="text-uppercase text-xs fw-bold text-muted px-3 mb-3" style="font-size: 10px; letter-spacing: 0.1em;">Menu Utama</div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                                <i class="fa-solid fa-chart-pie me-2 opacity-75"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'laporan' %}active{% endif %}" href="{{ url_for('laporan') }}">
+                                <i class="fa-solid fa-file-invoice me-2 opacity-75"></i> Laporan Uji Air
+                            </a>
+                        </li>
+                        {% if session.get('role') == 'staff' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'input_uji' %}active{% endif %}" href="{{ url_for('input_uji') }}">
+                                <i class="fa-solid fa-circle-plus me-2 opacity-75"></i> Input Uji Baru
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    {% if session.get('role') in ['admin', 'owner'] %}
+                    <div class="text-uppercase text-xs fw-bold text-muted px-3 mt-4 mb-3" style="font-size: 10px; letter-spacing: 0.1em;">Manajemen</div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'cabang' %}active{% endif %}" href="{{ url_for('cabang') }}">
+                                <i class="fa-solid fa-code-branch me-2 opacity-75"></i> Data Cabang
+                            </a>
+                        </li>
+                        {% if session.get('role') == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'users' %}active{% endif %}" href="{{ url_for('users') }}">
+                                <i class="fa-solid fa-users-gear me-2 opacity-75"></i> Kelola Pengguna
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+
+                    <div class="mt-5 p-3 rounded-4 text-center border shadow-sm bg-light">
+                        <div class="text-primary mb-2"><i class="fa-solid fa-shield-halved fa-lg"></i></div>
+                        <h6 class="text-dark fw-bold mb-1" style="font-size: 12px;">Standar Kemenkes</h6>
+                        <p class="text-muted mb-0 fw-medium" style="font-size: 11px;">pH: 6.5 - 8.5<br>TDS: &lt; 500 ppm</p>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="container-fluid">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'danger' else ('success' if category == 'success' else 'info') }} alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa-solid fa-circle-info me-2 fa-lg"></i>
+                                        <div>{{ message }}</div>
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

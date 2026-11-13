@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h2 class="fw-extrabold text-dark tracking-tight mb-1" style="font-weight: 800;">Manajemen Cabang</h2>
+        <p class="text-muted mb-0">Daftar seluruh cabang operasional Toko Royalti.</p>
+    </div>
+    {% if user.role == 'admin' %}
+    <div>
+        <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#modalTambahCabang">
+            <i class="fa-solid fa-plus me-2"></i> Tambah Cabang Baru
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row g-4 mb-5">
+    {% for c in cabang_list %}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100 p-3 rounded-4 transition-all">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-3 me-3 shadow-sm">
+                        <i class="fa-solid fa-store fa-lg"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1">{{ c.nama_cabang }}</h5>
+                        <span class="badge bg-light text-primary border border-primary border-opacity-10 rounded-pill px-3 py-1"><i class="fa-solid fa-location-dot me-1"></i> {{ c.kota }}</span>
+                    </div>
+                </div>
+                <hr class="text-muted opacity-10 my-3">
+                <p class="text-muted small mb-0 d-flex align-items-start">
+                    <i class="fa-solid fa-map-pin text-danger me-2 mt-1"></i>
+                    <span>{{ c.alamat }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Tambah Cabang -->
+{% if user.role == 'admin' %}
+<div class="modal fade" id="modalTambahCabang" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="fw-bold text-dark">Tambah Cabang Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Nama Cabang</label>
+                        <input type="text" name="nama_cabang" class="form-control rounded-3 py-2" placeholder="Contoh: Cabang BSD Serpong" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Alamat Lengkap</label>
+                        <textarea name="alamat" class="form-control rounded-3" rows="3" placeholder="Contoh: Jl. BSD Raya Utama No. 5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Kota</label>
+                        <input type="text" name="kota" class="form-control rounded-3 py-2" placeholder="Contoh: Tangerang Selatan" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 fw-semibold">Simpan Cabang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

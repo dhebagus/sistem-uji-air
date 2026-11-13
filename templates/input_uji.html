@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 mb-5">
+            <div class="card-body p-5">
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-3 me-3 shadow-sm">
+                        <i class="fa-solid fa-flask-vial fa-2x"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-extrabold text-dark tracking-tight mb-1" style="font-weight: 800;">Input Hasil Uji Air</h3>
+                        <p class="text-muted mb-0">Catat parameter pH, TDS, dan suhu air hasil pengujian cabang.</p>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    {% if user.role != 'staff' %}
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.1em;">Pilih Cabang Operasional</label>
+                        <select name="cabang_id" class="form-select border-0 bg-light py-3 rounded-3" required>
+                            <option value="" disabled selected>-- Pilih Cabang Toko Royalti --</option>
+                            {% for c in cabang_list %}
+                            <option value="{{ c.id }}">{{ c.nama_cabang }} - {{ c.kota }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% else %}
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.1em;">Cabang Penugasan</label>
+                        <input type="text" class="form-control border-0 bg-light py-3 rounded-3 fw-bold text-primary" value="{{ user.nama_cabang }}" readonly>
+                        <input type="hidden" name="cabang_id" value="{{ user.cabang_id }}">
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.1em;">Nilai pH Air (0 - 14)</label>
+                            <div class="input-group">
+                                <span class="input-group-text border-0 bg-light text-primary ps-3"><i class="fa-solid fa-droplet"></i></span>
+                                <input type="number" step="0.1" min="0" max="14" name="ph" class="form-control border-0 bg-light py-3" placeholder="Contoh: 7.2" required>
+                            </div>
+                            <div class="form-text small text-muted mt-1">Standar Layak Konsumsi: 6.5 - 8.5</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.1em;">Nilai TDS (ppm)</label>
+                            <div class="input-group">
+                                <span class="input-group-text border-0 bg-light text-warning ps-3"><i class="fa-solid fa-gauge"></i></span>
+                                <input type="number" step="0.1" min="0" name="tds" class="form-control border-0 bg-light py-3" placeholder="Contoh: 150" required>
+                            </div>
+                            <div class="form-text small text-muted mt-1">Standar Layak Konsumsi: &lt; 500 ppm</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.1em;">Suhu Air (°C) - Opsional</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-0 bg-light text-danger ps-3"><i class="fa-solid fa-temperature-three-quarters"></i></span>
+                            <input type="number" step="0.1" name="suhu" class="form-control border-0 bg-light py-3" placeholder="Contoh: 26.5">
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label small fw-bold text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.1em;">Catatan / Kondisi Fisik Air</label>
+                        <textarea name="catatan" class="form-control border-0 bg-light py-3" rows="3" placeholder="Contoh: Air jernih, tidak berbau, tidak berasa..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-light rounded-pill px-4 py-2 fw-bold text-muted">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Simpan & Evaluasi Kualitas
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

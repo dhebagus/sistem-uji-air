@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h2 class="fw-extrabold text-dark tracking-tight mb-1" style="font-weight: 800;">Kelola Pengguna</h2>
+        <p class="text-muted mb-0">Daftar akun admin, owner, dan staff operasional sistem.</p>
+    </div>
+    <div>
+        <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#modalTambahUser">
+            <i class="fa-solid fa-user-plus me-2"></i> Tambah Pengguna Baru
+        </button>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-5">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-5">NAMA LENGKAP</th>
+                        <th>USERNAME</th>
+                        <th>ROLE / HAK AKSES</th>
+                        <th class="pe-5">CABANG PENUGASAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users_list %}
+                    <tr>
+                        <td class="ps-5">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px; font-weight: 700;">
+                                    {{ u.nama_lengkap[0]|upper }}
+                                </div>
+                                <span class="fw-bold text-dark">{{ u.nama_lengkap }}</span>
+                            </div>
+                        </td>
+                        <td><code class="text-primary bg-light px-2 py-1 rounded">{{ u.username }}</code></td>
+                        <td>
+                            {% if u.role == 'owner' %}
+                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 rounded-pill"><i class="fa-solid fa-crown me-1"></i> OWNER</span>
+                            {% elif u.role == 'admin' %}
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill"><i class="fa-solid fa-shield-halved me-1"></i> ADMIN</span>
+                            {% else %}
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-2 rounded-pill"><i class="fa-solid fa-user-tie me-1"></i> STAFF CABANG</span>
+                            {% endif %}
+                        </td>
+                        <td class="pe-5 fw-semibold text-muted">{{ u.nama_cabang if u.nama_cabang else 'Pusat (Semua Cabang)' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Tambah User -->
+<div class="modal fade" id="modalTambahUser" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="fw-bold text-dark">Tambah Pengguna Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Nama Lengkap</label>
+                        <input type="text" name="nama_lengkap" class="form-control rounded-3 py-2" placeholder="Contoh: Budi Santoso" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Username</label>
+                        <input type="text" name="username" class="form-control rounded-3 py-2" placeholder="Contoh: budi_staff" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Password</label>
+                        <input type="password" name="password" class="form-control rounded-3 py-2" placeholder="Minimal 6 karakter" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Role / Hak Akses</label>
+                        <select name="role" class="form-select rounded-3 py-2" required>
+                            <option value="staff">Staff Cabang</option>
+                            <option value="admin">Admin</option>
+                            <option value="owner">Owner</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">Cabang (Khusus Staff)</label>
+                        <select name="cabang_id" class="form-select rounded-3 py-2">
+                            <option value="">-- Bukan Staff Cabang / Pusat --</option>
+                            {% for c in cabang_list %}
+                            <option value="{{ c.id }}">{{ c.nama_cabang }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 fw-semibold">Simpan Pengguna</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

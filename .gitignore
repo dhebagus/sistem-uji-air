@@ -1,0 +1,13 @@
+# Python venv
+venv/
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project configs
+.env
+*.log
+.vscode/
